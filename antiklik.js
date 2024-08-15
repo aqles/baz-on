@@ -1,8 +1,9 @@
 // Menambahkan event listener untuk menangani klik
         document.addEventListener('DOMContentLoaded', function() {
-            const image = document.querySelector('.image-zoom');
+            const imageLink = document.querySelector('.image-zoom-link');
 
-            image.addEventListener('click', function() {
-                this.classList.toggle('zoomed'); // Menambahkan atau menghapus kelas 'zoomed' saat diklik
+            imageLink.addEventListener('click', function() {
+                this.querySelector('.image-zoom').classList.toggle('zoomed'); // Menambahkan atau menghapus kelas 'zoomed' saat diklik
+                return false; // Mencegah perilaku default
             });
         });
