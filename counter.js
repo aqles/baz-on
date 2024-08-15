@@ -3,7 +3,7 @@ function animateCounter(id, duration) {
     const target = +counter.getAttribute('data-target');
     const increment = target / duration;
 
-    let current = 0;
+    let current = 1000;
 
     const updateCounter = () => {
         current += increment;
@@ -21,5 +21,5 @@ function animateCounter(id, duration) {
 
 // Inisiasi animasi saat halaman sudah di-load
 window.onload = function() {
-    animateCounter('counter', 2000); // 2000ms = 2 detik
+    animateCounter('counter', 3000); // 2000ms = 2 detik
 };
