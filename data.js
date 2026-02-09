@@ -200,6 +200,39 @@ const products = [
             ],
             flavors: ["Red Velvet", "Double Chocolate", "Vanilla Bean"]
         }
+    },
+    {
+        id: 11,
+        name: "Choco Lava Cake",
+        price: 45000,
+        category: "Cakes",
+        image: "images/choco-lava.png",
+        description: "Lumeran cokelat hangat dalam cake lembut yang menggugah selera.",
+        rating: 4.8, // updated
+        reviews: 45,
+        stock: 30,
+        specs: ["Main Ingredient: Dark Chocolate", "Serving: Warm", "Best Paired: Vanilla Ice Cream"],
+        variants: {
+            flavors: ["Original Dark", "White Chocolate"]
+        }
+    },
+    {
+        id: 12,
+        name: "Matcha Mille Crepes",
+        price: 55000,
+        category: "Cakes",
+        image: "images/matcha-crepes.png",
+        description: "Berlapis-lapis crepes lembut dengan krim matcha premium yang autentik.",
+        rating: 4.9,
+        reviews: 62,
+        stock: 25,
+        specs: ["Main Ingredient: Premium Matcha", "Layers: 20+", "Taste: Sweet & Earthy"],
+        variants: {
+            sizes: [
+                { name: "Slice", price: 55000 },
+                { name: "Whole Cake", price: 450000 }
+            ]
+        }
     }
 ];
 
