@@ -7,11 +7,13 @@
     <title>404 Halaman Tidak Ditemukan | Baz-On Store</title>
     <meta name="description" content="Halaman yang Anda cari tidak ditemukan.">
     <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#0f172a">
 
     <link rel="icon" type="image/svg+xml" href="logo.svg?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -28,14 +30,12 @@
         }
 
         .error-code {
-            font-size: 8rem;
+            font-size: clamp(5rem, 18vw, 9rem);
             font-weight: 800;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            line-height: 1;
+            color: var(--accent);
+            margin-bottom: 16px;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
         }
 
         .error-message {
@@ -65,7 +65,7 @@
                     </div>
                 </a>
                 <div class="nav-icons">
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Ganti tema gelap atau terang">
                         <i class="fa-solid fa-moon"></i>
                     </button>
                     <a href="index.html" class="cart-icon-wrapper" style="color: var(--text-primary);">
@@ -86,6 +86,7 @@
 
         <!-- Footer -->
         <footer>
+            <div class="footer-wordmark" aria-hidden="true">BAZ-ON</div>
             <div class="footer-content">
                 <div class="footer-brand">
                     <h3>Baz-On</h3>
@@ -110,9 +111,9 @@
                                 class="fa-solid fa-paper-plane"></i></button>
                     </form>
                     <div class="social-links">
-                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" aria-label="Instagram Baz-On"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp Baz-On"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" aria-label="TikTok Baz-On"><i class="fa-brands fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
@@ -133,33 +134,18 @@
 
     <!-- Minimal Script to handle theme toggle if possible, or just link main script but some elements might be missing causing errors -->
     <script>
-        // Simple Theme Toggle Logic repeated here to avoid errors from missing home page elements in script.js
+        // Toggle tema mandiri (script.js utama butuh elemen toko yang tidak ada di halaman ini)
         const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
         const icon = themeToggle.querySelector('i');
-
-        // Check local storage
-        const currentTheme = localStorage.getItem('theme');
-        if (currentTheme) {
-            body.setAttribute('data-theme', currentTheme);
-            if (currentTheme === 'light') {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
-        }
+        const savedTheme = localStorage.getItem('bazon_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'light') icon.className = 'fa-solid fa-sun';
 
         themeToggle.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'light') {
-                body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            } else {
-                body.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
+            const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('bazon_theme', next);
+            icon.className = next === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         });
     </script>
 </body>

@@ -10,20 +10,28 @@
     <meta name="robots" content="noindex, follow">
     <!-- Terms pages often set to noindex to avoid duplicate content flags, but follow links -->
     <link rel="canonical" href="https://aqles.github.io/baz-on/terms.html">
+    <meta name="theme-color" content="#0f172a">
     <link rel="icon" type="image/svg+xml" href="logo.svg?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .page-header {
-            padding: 120px 20px 60px;
-            text-align: center;
-            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1000');
-            background-size: cover;
-            background-position: center;
-            border-bottom: 1px solid var(--surface-border);
+            padding: 130px 24px 50px;
+            text-align: left;
+            background: var(--card-bg);
+        }
+
+        .page-header h1 {
+            font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .page-content {
@@ -34,8 +42,7 @@
 
         .content-card {
             background: var(--card-bg);
-            border: 1px solid var(--surface-border);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius);
             padding: 40px;
         }
 
@@ -44,7 +51,7 @@
         }
 
         .content-section h3 {
-            color: var(--accent);
+            color: var(--text-primary);
             margin-bottom: 15px;
             font-size: 1.5rem;
         }
@@ -93,8 +100,8 @@
 
     <!-- Header -->
     <header class="page-header">
-        <h1>Syarat & <span class="gradient-text">Ketentuan</span></h1>
-        <p style="color: var(--text-secondary); max-width: 600px; margin: 20px auto 0;">Harap baca syarat dan ketentuan
+        <h1>Syarat &amp; Ketentuan</h1>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 20px auto 0; margin-left: max(0px, calc((100% - 1000px) / 2));">Harap baca syarat dan ketentuan
             ini dengan saksama sebelum menggunakan layanan kami.</p>
     </header>
 
@@ -159,10 +166,11 @@
 
     <!-- Footer -->
     <footer>
+        <div class="footer-wordmark" aria-hidden="true">BAZ-ON</div>
         <div class="footer-content">
             <div class="footer-brand">
                 <h3>Baz-On</h3>
-                <p>Experience the future of shopping.</p>
+                <p>Toko online serba ada: fashion, gadget, kue, dan jasa.</p>
             </div>
             <div class="footer-links">
                 <a href="index.html#products">Produk</a>
@@ -170,9 +178,9 @@
                 <a href="contact.html">Hubungi Kami</a>
             </div>
             <div class="social-links">
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
-                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" aria-label="Instagram Baz-On"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" aria-label="WhatsApp Baz-On"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#" aria-label="TikTok Baz-On"><i class="fa-brands fa-tiktok"></i></a>
             </div>
         </div>
         <div class="copyright">
