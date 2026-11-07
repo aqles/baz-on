@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baz-On Store | Premium E-Commerce</title>
+    <title>Baz-On Store | Toko Online Serba Ada</title>
     <meta name="description"
         content="Toko online terpercaya dengan kualitas terbaik. Belanja mudah, checkout via WhatsApp.">
     <meta name="keywords" content="toko online, fashion pria, jam tangan, sneakers, belanja online, premium store">
@@ -12,15 +12,15 @@
     <meta name="robots" content="index, follow">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://aqles.github.io/baz-on/index.html">
+    <link rel="canonical" href="https://aqles.github.io/baz-on/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aqles.github.io/baz-on/">
-    <meta property="og:title" content="Baz-On Store | Premium E-Commerce">
+    <meta property="og:title" content="Baz-On Store | Toko Online Serba Ada">
     <meta property="og:description"
         content="Temukan gaya premium Anda di Baz-On Store. Belanja aman, mudah, dan terpercaya.">
-    <meta property="og:image" content="https://aqles.github.io/baz-on/images/desktop-preview.png">
+    <meta property="og:image" content="https://aqles.github.io/baz-on/images/preview.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -28,7 +28,7 @@
     <meta property="twitter:title" content="Baz-On Store | Premium E-Commerce">
     <meta property="twitter:description"
         content="Temukan gaya premium Anda di Baz-On Store. Belanja aman, mudah, dan terpercaya.">
-    <meta property="twitter:image" content="https://aqles.github.io/baz-on/images/desktop-preview.png">
+    <meta property="twitter:image" content="https://aqles.github.io/baz-on/images/preview.jpg">
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -40,12 +40,6 @@
         "description": "Toko online terpercaya dengan kualitas terbaik. Belanja mudah, checkout via WhatsApp.",
         "url": "https://aqles.github.io/baz-on/",
         "telephone": "+6281234567890",
-        "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Jl. Digital No. 1",
-            "addressLocality": "Jakarta",
-            "addressCountry": "ID"
-        },
         "priceRange": "$$"
     }
     </script>
@@ -56,7 +50,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -64,12 +59,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    }, err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
+                navigator.serviceWorker.register('sw.js').catch(() => {});
             });
         }
     </script>
@@ -84,15 +74,18 @@
                     <img src="logo.svg" alt="Baz-On Logo" class="logo-img"> Baz-On
                 </div>
                 <div class="nav-icons">
+                    <button id="installBtn" class="install-btn hidden" aria-label="Install aplikasi Baz-On">
+                        <i class="fa-solid fa-download"></i> Install
+                    </button>
 
                     <!-- Language Toggle -->
-                    <button id="langToggle" aria-label="Toggle Language">
+                    <button id="langToggle" aria-label="Ganti bahasa">
                         ID
                     </button>
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Ganti tema gelap atau terang">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                    <div class="cart-icon-wrapper" id="cartBtn">
+                    <div class="cart-icon-wrapper" id="cartBtn" role="button" tabindex="0" aria-label="Buka keranjang belanja">
                         <i class="fa-solid fa-shopping-bag"></i>
                         <span class="cart-count" id="cartCount">0</span>
                     </div>
@@ -107,8 +100,8 @@
                 <!-- Slides will be injected by JS -->
             </div>
 
-            <button class="slider-btn prev-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-            <button class="slider-btn next-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+            <button class="slider-btn prev-btn" id="prevBtn" aria-label="Slide sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="slider-btn next-btn" id="nextBtn" aria-label="Slide selanjutnya"><i class="fa-solid fa-chevron-right"></i></button>
 
             <div class="slider-dots" id="sliderDots"></div>
         </header>
@@ -116,11 +109,8 @@
         <!-- Flash Sale Section -->
         <section class="flash-sale-section" id="flashSale">
             <div class="flash-sale-content">
-                <div class="flash-label">
-                    <i class="fa-solid fa-bolt"></i> <span data-i18n="flash_sale.label">FLASH SALE</span>
-                </div>
                 <h2 data-i18n="flash_sale.title">Diskon Gila-Gilaan Hingga 70%</h2>
-                <p data-i18n="flash_sale.ends_in">Berakhir dalam:</p>
+                <p><span class="flash-label"><i class="fa-solid fa-bolt"></i> <span data-i18n="flash_sale.label">FLASH SALE</span></span> <span data-i18n="flash_sale.ends_in">Berakhir dalam:</span></p>
                 <div class="countdown-timer">
                     <div class="timer-box">
                         <span id="timerHours">00</span>
@@ -137,14 +127,13 @@
                         <small data-i18n="flash_sale.seconds">Detik</small>
                     </div>
                 </div>
-                <button class="btn-flash"
-                    onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})"
+                <button class="btn-flash" id="flashShopBtn"
                     data-i18n="flash_sale.shop_now">
                     Belanja Sekarang
                 </button>
             </div>
             <div class="flash-sale-image">
-                <img src="images/flash-sale.png" alt="Flash Sale" onerror="this.style.display='none'">
+                <img src="images/flash-sale.webp" alt="Flash Sale" onerror="this.style.display='none'">
             </div>
         </section>
 
@@ -152,7 +141,6 @@
         <main id="products" class="products-section">
             <div class="section-header">
                 <h2 data-i18n="products.title">Koleksi Terbaru</h2>
-                <div class="divider"></div>
             </div>
 
             <div class="controls-wrapper">
@@ -191,8 +179,7 @@
                 <!-- Products will be injected here by JS -->
             </div>
 
-            <div class="load-more-container" id="loadMoreContainer"
-                style="display: none; text-align: center; margin-top: 2rem;">
+            <div class="load-more-container" id="loadMoreContainer" style="display: none;">
                 <button id="loadMoreBtn" class="btn-primary" data-i18n="products.load_more">Muat Lebih Banyak</button>
             </div>
         </main>
@@ -201,11 +188,10 @@
         <section id="testimonials" class="testimonials-section">
             <div class="section-header">
                 <h2 data-i18n="testimonials.title">Apa Kata Mereka?</h2>
-                <div class="divider"></div>
             </div>
 
             <div class="testimonial-slider-container">
-                <button class="testi-btn prev" id="testiPrevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="testi-btn prev" id="testiPrevBtn" aria-label="Testimoni sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
 
                 <div class="testimonial-slider-wrapper">
                     <div class="testimonial-track" id="testimonialTrack">
@@ -213,50 +199,47 @@
                     </div>
                 </div>
 
-                <button class="testi-btn next" id="testiNextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+                <button class="testi-btn next" id="testiNextBtn" aria-label="Testimoni selanjutnya"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
 
             <div class="testi-dots" id="testiDots"></div>
         </section>
 
-        </section>
-
         <!-- Trust Features Section -->
         <section class="features-section">
+          <div class="features-inner">
             <div class="feature-card">
-                <i class="fa-solid fa-truck-fast"></i>
                 <div>
                     <h3 data-i18n="features.free_shipping.title">Gratis Ongkir</h3>
                     <p data-i18n="features.free_shipping.desc">Minimal belanja Rp 500rb</p>
                 </div>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-shield-halved"></i>
                 <div>
                     <h3 data-i18n="features.secure_payment.title">Pembayaran Aman</h3>
                     <p data-i18n="features.secure_payment.desc">Transaksi 100% terproteksi</p>
                 </div>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-medal"></i>
                 <div>
                     <h3 data-i18n="features.quality_guarantee.title">Jaminan Kualitas</h3>
                     <p data-i18n="features.quality_guarantee.desc">Produk original & premium</p>
                 </div>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-headset"></i>
                 <div>
                     <h3 data-i18n="features.service_247.title">Layanan 24/7</h3>
                     <p data-i18n="features.service_247.desc">Bantuan kapan saja</p>
                 </div>
             </div>
+          </div>
         </section>
 
 
 
         <!-- Footer -->
         <footer>
+            <div class="footer-wordmark" aria-hidden="true">BAZ-ON</div>
             <div class="footer-content">
                 <div class="footer-brand">
                     <h3>Baz-On</h3>
@@ -283,9 +266,9 @@
                                 class="fa-solid fa-paper-plane"></i></button>
                     </form>
                     <div class="social-links">
-                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" aria-label="Instagram Baz-On"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp Baz-On"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" aria-label="TikTok Baz-On"><i class="fa-brands fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
@@ -311,12 +294,12 @@
     </div>
 
     <!-- Product Detail Modal -->
-    <div class="modal-overlay" id="productModal">
+    <div class="modal-overlay" id="productModal" aria-hidden="true">
         <div class="modal-content product-modal-content">
-            <button class="close-modal" id="closeProductModal"><i class="fa-solid fa-xmark"></i></button>
+            <button class="close-modal" id="closeProductModal" aria-label="Tutup detail produk"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-body product-detail-body">
                 <div class="modal-image-wrapper">
-                    <img src="" alt="Product Image" id="modalProductImage">
+                    <img src="logo.svg" alt="Product Image" id="modalProductImage">
                 </div>
                 <div class="modal-product-info">
                     <span class="modal-category" id="modalProductCategory">Category</span>
@@ -329,7 +312,7 @@
                         <span class="modal-stock" id="modalProductStock" data-i18n="modal.stock">Stok: -</span>
                     </div>
 
-                    <p class="modal-price" id="modalProductPrice">So, 0</p>
+                    <p class="modal-price" id="modalProductPrice">Rp 0</p>
                     <p class="modal-description" id="modalProductDesc">Description...</p>
 
                     <!-- Variants Section -->
@@ -351,11 +334,11 @@
                     <div class="product-share">
                         <span data-i18n="modal.share">Bagikan:</span>
                         <div class="share-icons">
-                            <button class="share-btn whatsapp" id="shareWa" title="Share ke WhatsApp"><i
+                            <button class="share-btn whatsapp" id="shareWa" title="Share ke WhatsApp" aria-label="Bagikan ke WhatsApp"><i
                                     class="fa-brands fa-whatsapp"></i></button>
-                            <button class="share-btn twitter" id="shareTw" title="Share ke Twitter"><i
+                            <button class="share-btn twitter" id="shareTw" title="Share ke Twitter" aria-label="Bagikan ke Twitter"><i
                                     class="fa-brands fa-twitter"></i></button>
-                            <button class="share-btn copy" id="shareCopy" title="Salin Link"><i
+                            <button class="share-btn copy" id="shareCopy" title="Salin Link" aria-label="Salin link produk"><i
                                     class="fa-solid fa-link"></i></button>
                         </div>
                     </div>
@@ -365,11 +348,11 @@
     </div>
 
     <!-- Cart Modal -->
-    <div class="cart-modal-overlay" id="cartModal">
+    <div class="cart-modal-overlay" id="cartModal" aria-hidden="true">
         <div class="cart-modal">
             <div class="cart-header">
                 <h3 data-i18n="cart.title">Keranjang Belanja</h3>
-                <button class="close-cart" id="closeCart"><i class="fa-solid fa-xmark"></i></button>
+                <button class="close-cart" id="closeCart" aria-label="Tutup keranjang"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="cart-items" id="cartItems">
                 <!-- Cart items will be injected here -->
@@ -381,7 +364,7 @@
                     <input type="text" id="couponInput" class="coupon-input" placeholder="Kode Promo (opsional)"
                         data-i18n-placeholder="cart.coupon_placeholder">
                     <button id="applyCouponBtn" class="btn-apply" data-i18n="cart.apply">Pakai</button>
-                    <button id="removeCouponBtn" class="btn-remove-coupon hidden"><i
+                    <button id="removeCouponBtn" class="btn-remove-coupon hidden" aria-label="Hapus kupon"><i
                             class="fa-solid fa-xmark"></i></button>
                 </div>
 
@@ -397,11 +380,11 @@
     </div>
 
     <!-- Checkout Form Modal -->
-    <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-overlay" id="checkoutModal" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 data-i18n="checkout.title">Data Pemesanan</h3>
-                <button class="close-modal" id="closeCheckout"><i class="fa-solid fa-xmark"></i></button>
+                <button class="close-modal" id="closeCheckout" aria-label="Tutup form pemesanan"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <form id="checkoutForm" onsubmit="event.preventDefault(); processOrder();">

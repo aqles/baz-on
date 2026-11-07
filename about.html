@@ -8,8 +8,13 @@
     <meta name="description"
         content="Tentang Baz-On Store, platform belanja modern dengan pilihan fashion dan gadget premium.">
 
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="manifest.json">
     <!-- CSS (Reuse existing styles) -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/svg+xml" href="logo.svg?v=2">
@@ -18,28 +23,33 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    }, err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
+                navigator.serviceWorker.register('sw.js').catch(() => {});
             });
         }
     </script>
 
     <style>
         .about-header {
-            text-align: center;
-            padding: 120px 20px 60px;
-            background: linear-gradient(to bottom, var(--bg-color), var(--card-bg));
-            margin-top: 60px;
-            /* Offset for fixed navbar */
+            text-align: left;
+            padding: 130px 24px 50px;
+            max-width: 1000px;
+            margin: 60px auto 0;
         }
 
         .about-header h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: clamp(2.6rem, 6vw, 4.6rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 18px;
+        }
+
+        .about-grid .feature-card {
+            flex-direction: column;
+            align-items: flex-start;
+            background: var(--card-bg);
+            padding: 26px;
+            border-radius: var(--radius);
         }
 
         .about-content {
@@ -125,13 +135,13 @@
                 </a>
                 <div class="nav-icons">
                     <!-- Language Toggle -->
-                    <button id="langToggle" aria-label="Toggle Language">
+                    <button id="langToggle" aria-label="Ganti bahasa">
                         ID
                     </button>
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Ganti tema gelap atau terang">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                    <div class="cart-icon-wrapper" id="cartBtn">
+                    <div class="cart-icon-wrapper" id="cartBtn" role="button" tabindex="0" aria-label="Buka keranjang belanja">
                         <i class="fa-solid fa-shopping-bag"></i>
                         <span class="cart-count" id="cartCount">0</span>
                     </div>
@@ -140,7 +150,7 @@
         </nav>
 
         <header class="about-header">
-            <h1 class="gradient-text">Tentang Baz-On</h1>
+            <h1>Tentang Baz-On</h1>
             <p style="font-size: 1.2rem; color: var(--text-secondary);">Membangun pengalaman belanja masa depan, hari
                 ini.</p>
         </header>
@@ -220,6 +230,7 @@
 
         <!-- Footer (Synced with index.html) -->
         <footer>
+            <div class="footer-wordmark" aria-hidden="true">BAZ-ON</div>
             <div class="footer-content">
                 <div class="footer-brand">
                     <h3>Baz-On</h3>
@@ -246,9 +257,9 @@
                                 class="fa-solid fa-paper-plane"></i></button>
                     </form>
                     <div class="social-links">
-                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" aria-label="Instagram Baz-On"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp Baz-On"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" aria-label="TikTok Baz-On"><i class="fa-brands fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>

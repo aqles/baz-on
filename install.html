@@ -8,8 +8,12 @@
     <meta name="description" content="Panduan mudah menginstall aplikasi Baz-On Store di Android, iOS, dan Desktop.">
     <meta name="robots" content="index, follow">
 
+    <meta name="theme-color" content="#0f172a">
     <!-- CSS (Reuse existing styles) -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/svg+xml" href="logo.svg?v=2">
@@ -24,17 +28,9 @@
 
         .guide-card {
             background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--surface-border);
+            border-radius: var(--radius);
             padding: 30px;
             margin-bottom: 30px;
-            transition: var(--transition);
-        }
-
-        .guide-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .guide-header {
@@ -42,7 +38,6 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
-            border-bottom: 1px solid var(--surface-border);
             padding-bottom: 15px;
         }
 
@@ -88,7 +83,7 @@
         }
 
         .note {
-            background: rgba(56, 189, 248, 0.1);
+            background: var(--bg-color);
             border-left: 4px solid var(--accent);
             padding: 15px;
             border-radius: 0 8px 8px 0;
@@ -121,7 +116,7 @@
                 <img src="logo.svg" alt="Baz-On Logo" class="logo-img"> Baz-On
             </a>
             <div class="nav-icons">
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+                <button class="theme-toggle" id="themeToggle" aria-label="Ganti tema gelap atau terang">
                     <i class="fa-solid fa-moon"></i>
                 </button>
             </div>
@@ -132,7 +127,7 @@
         <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda</a>
 
         <div class="section-header" style="text-align: left; margin-bottom: 40px;">
-            <h1 class="gradient-text">Panduan Install Aplikasi</h1>
+            <h1 style="font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.02;">Panduan Install Aplikasi</h1>
             <p style="color: var(--text-secondary);">Nikmati pengalaman belanja terbaik dengan menginstall aplikasi
                 Baz-On Store langsung ke perangkat Anda.</p>
         </div>
@@ -145,7 +140,7 @@
             </div>
             <ol class="step-list">
                 <li class="step-item">Buka <strong>Baz-On Store</strong> di Google Chrome.</li>
-                <li class="step-item">Tunggu muncul notifikasi "Install App" di bagian bawah layar, atau klik ikon titik
+                <li class="step-item">Tunggu sampai tombol <strong>Install</strong> muncul di bagian atas halaman, atau klik ikon titik
                     tiga (Menu) di pojok kanan atas.</li>
                 <li class="step-item">Pilih menu <strong>"Install app"</strong> atau <strong>"Tambahkan ke Layar
                         Utama"</strong>.</li>

@@ -7,25 +7,25 @@
 const heroSlides = [
     {
         id: 1,
-        title: 'Temukan Gaya <span class="gradient-text">Premium</span> Anda',
+        title: 'Temukan Gaya Premium Anda',
         description: 'Koleksi eksklusif dengan kualitas terbaik untuk menunjang penampilan Anda.',
-        image: 'images/jacket.png',
+        image: 'images/jacket.webp',
         cta: 'Belanja Sekarang',
         link: '#products'
     },
     {
         id: 2,
-        title: 'Koleksi <span class="gradient-text">Jam Tangan</span> Mewah',
+        title: 'Koleksi Jam Tangan Mewah',
         description: 'Tampil lebih percaya diri dengan aksesoris pilihan yang elegan.',
-        image: 'images/watch.png',
+        image: 'images/watch.webp',
         cta: 'Lihat Koleksi',
         link: '#products'
     },
     {
         id: 3,
-        title: 'Sneakers <span class="gradient-text">Terpopuler</span> Bulan Ini',
+        title: 'Sneakers Terpopuler Bulan Ini',
         description: 'Kenyamanan maksimal untuk setiap langkah Anda. Dapatkan sekarang!',
-        image: 'images/sneakers.png',
+        image: 'images/sneakers.webp',
         cta: 'Beli Sekarang',
         link: '#products'
     }
@@ -39,7 +39,7 @@ const products = [
         price: 1500000,
         originalPrice: 2000000,
         category: "Accessories",
-        image: "images/watch.png",
+        image: "images/watch.webp",
         description: "Jam tangan premium dengan desain minimalis untuk eksekutif muda.",
         badge: "best-seller",
         rating: 4.8,
@@ -55,7 +55,7 @@ const products = [
         name: "Urban Leather Jacket",
         price: 850000,
         category: "Fashion",
-        image: "images/jacket.png",
+        image: "images/jacket.webp",
         description: "Jaket kulit sintetis premium, cocok untuk gaya urban casual.",
         rating: 4.5,
         reviews: 85,
@@ -72,7 +72,7 @@ const products = [
         price: 650000,
         originalPrice: 850000,
         category: "Footwear",
-        image: "images/sneakers.png",
+        image: "images/sneakers.webp",
         description: "Sneakers hitam elegan dengan kenyamanan maksimal untuk aktivitas harian.",
         badge: "limited",
         rating: 4.9,
@@ -88,7 +88,7 @@ const products = [
         name: "Heritage Backpack",
         price: 450000,
         category: "Bags",
-        image: "images/backpack.png",
+        image: "images/backpack.webp",
         description: "Tas punggung vintage dengan material kanvas tahan air.",
         rating: 4.6,
         reviews: 64,
@@ -104,7 +104,7 @@ const products = [
         price: 2100000,
         originalPrice: 2500000,
         category: "Electronics",
-        image: "images/headset.png",
+        image: "images/headset.webp",
         description: "Headset noise-cancelling dengan kualitas suara studio.",
         badge: "best-seller",
         rating: 5.0,
@@ -117,7 +117,7 @@ const products = [
         name: "Slim Fit Chinos",
         price: 350000,
         category: "Fashion",
-        image: "images/chinos.png",
+        image: "images/chinos.webp",
         description: "Celana chinos nyaman dengan potongan slim fit modern.",
         rating: 4.4,
         reviews: 150,
@@ -133,7 +133,7 @@ const products = [
         name: "Jasa Bungkus Kado Premium",
         price: 25000,
         category: "Services",
-        image: "images/gift-wrap.png",
+        image: "images/gift-wrap.webp",
         description: "Layanan bungkus kado eksklusif dengan kertas premium dan pita.",
         rating: 5.0,
         reviews: 215,
@@ -148,7 +148,7 @@ const products = [
         name: "Jasa Cuci Sepatu Deep Clean",
         price: 45000,
         category: "Services",
-        image: "images/shoe-clean.png",
+        image: "images/shoe-clean.webp",
         description: "Perawatan cuci sepatu mendalam untuk semua jenis bahan (Canvas, Suede, Leather).",
         rating: 4.8,
         reviews: 89,
@@ -168,7 +168,7 @@ const products = [
         name: "Lapis Legit Premium",
         price: 150000,
         category: "Cakes",
-        image: "images/lapis-legit.png",
+        image: "images/lapis-legit.webp",
         description: "Kue lapis legit khas Indonesia dengan rasa butter yang kaya dan tekstur lembut.",
         rating: 4.9,
         reviews: 58,
@@ -187,7 +187,7 @@ const products = [
         name: "Birthday Cake Custom",
         price: 200000,
         category: "Cakes",
-        image: "images/red-velvet.png",
+        image: "images/red-velvet.webp",
         description: "Kue ulang tahun custom dengan dasar Red Velvet atau pilihan lain.",
         rating: 4.7,
         reviews: 34,
@@ -206,7 +206,7 @@ const products = [
         name: "Choco Lava Cake",
         price: 45000,
         category: "Cakes",
-        image: "images/choco-lava.png",
+        image: "images/choco-lava.webp",
         description: "Lumeran cokelat hangat dalam cake lembut yang menggugah selera.",
         rating: 4.8, // updated
         reviews: 45,
@@ -221,7 +221,7 @@ const products = [
         name: "Matcha Mille Crepes",
         price: 55000,
         category: "Cakes",
-        image: "images/matcha-crepes.png",
+        image: "images/matcha-crepes.webp",
         description: "Berlapis-lapis crepes lembut dengan krim matcha premium yang autentik.",
         rating: 4.9,
         reviews: 62,
@@ -244,7 +244,7 @@ const testimonials = [
         role: "Verified Buyer",
         text: "Kualitas jaketnya luar biasa! Bahannya tebal tapi adem dipakai. Pengiriman juga sangat cepat.",
         rating: 5,
-        image: "https://api.dicebear.com/9.x/adventurer/svg?seed=Kingston"
+        image: "images/avatar-1.svg"
     },
     {
         id: 2,
@@ -252,7 +252,7 @@ const testimonials = [
         role: "Fashion Enthusiast",
         text: "Suka banget sama model jam tangannya. Elegan dan mewah, cocok buat dipakai ke kantor.",
         rating: 5,
-        image: "https://api.dicebear.com/9.x/adventurer/svg?seed=Amaya"
+        image: "images/avatar-2.svg"
     },
     {
         id: 3,
@@ -260,7 +260,7 @@ const testimonials = [
         role: "Regular Customer",
         text: "Sneakers-nya nyaman banget dipakai seharian. Ukurannya pas dan sesuai deskripsi.",
         rating: 4,
-        image: "https://api.dicebear.com/9.x/adventurer/svg?seed=Chase"
+        image: "images/avatar-3.svg"
     }
 ];
 // --- Pengaturan Umum ---
