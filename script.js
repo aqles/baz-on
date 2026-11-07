@@ -135,25 +135,37 @@ function saveCart() {
 }
 
 function showToast(message, type = 'info') {
+    // Toast WAJIB masuk #toastContainer (fixed, z-index 3000) — dulu nempel ke body
+    // jadi blok statis di dasar halaman dan tidak pernah terlihat user.
+    const container = document.getElementById('toastContainer') || document.body;
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     toast.textContent = message;
 
-    document.body.appendChild(toast);
+    container.appendChild(toast);
 
     // Trigger animation
     setTimeout(() => {
         toast.classList.add('show');
-    }, 100);
+    }, 30);
 
     // Remove
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => {
-            document.body.removeChild(toast);
+            toast.remove();
         }, 300);
     }, 3000);
 }
+
+// Kunci scroll halaman selama ada modal/drawer terbuka — dulu halaman belakang ikut scroll.
+function syncScrollLock() {
+    const anyOpen = [productModal, cartModal, checkoutModal].some(m => m && m.classList.contains('active'));
+    document.body.style.overflow = anyOpen ? 'hidden' : '';
+}
+[productModal, cartModal, checkoutModal].forEach(m => {
+    if (m) new MutationObserver(syncScrollLock).observe(m, { attributes: true, attributeFilter: ['class'] });
+});
 
 // --- Logika "Muat Lebih Banyak" ---
 let currentProductLimit = config.maxProducts || 8;
@@ -219,6 +231,12 @@ function renderProducts(category = 'all', searchTerm = '') {
         } else {
             loadMoreContainer.style.display = 'none';
         }
+    }
+
+    if (filteredProducts.length === 0) {
+        // Dulu grid cuma kosong melompong (mis. filter Favorit tanpa favorit) tanpa penjelasan.
+        productGrid.innerHTML = `<div class="empty-products">${escapeHtml(translations[currentLang].products.empty)}</div>`;
+        return;
     }
 
     productGrid.innerHTML = filteredProducts.map(product => {
@@ -371,7 +389,8 @@ function renderCart() {
         applyCouponBtn.classList.add('hidden');
         removeCouponBtn.classList.remove('hidden');
     } else {
-        couponInput.value = '';
+        // Jangan timpa couponInput.value di sini: renderCart terpicu banyak hal
+        // (qty, tambah item) dan dulu kode yang sedang diketik user ikut terhapus.
         couponInput.disabled = false;
         applyCouponBtn.classList.remove('hidden');
         removeCouponBtn.classList.add('hidden');
@@ -383,7 +402,8 @@ window.addToCart = (productId, fromModal = false) => {
     const product = products.find(p => p.id === productId);
 
     // If adding from grid, and product has variants, open modal instead
-    if (!fromModal && product.variants && (product.variants.sizes || product.variants.colors)) {
+    // (flavors ikut dicek: produk rasa-saja dulu lolos dan masuk keranjang tanpa rasa terpilih)
+    if (!fromModal && product.variants && (product.variants.sizes || product.variants.colors || product.variants.flavors)) {
         openProductModal(productId);
         showToast(translations[currentLang].toast.select_variant, 'info');
         return;
@@ -596,6 +616,7 @@ window.openProductModal = (id) => {
         if (product.variants.sizes && product.variants.sizes.length > 0) {
             const sizeGroup = document.createElement('div');
             sizeGroup.className = 'variant-group';
+            sizeGroup.dataset.variantGroup = 'size';
             sizeGroup.innerHTML = `
                 <span class="variant-label">${escapeHtml(translations[currentLang].modal.variant_size)}</span>
                 <div class="variant-options" id="sizeOptions">
@@ -614,6 +635,7 @@ window.openProductModal = (id) => {
         if (product.variants.colors && product.variants.colors.length > 0) {
             const colorGroup = document.createElement('div');
             colorGroup.className = 'variant-group';
+            colorGroup.dataset.variantGroup = 'color';
             colorGroup.innerHTML = `
                 <span class="variant-label">${escapeHtml(translations[currentLang].modal.variant_color)}</span>
                 <div class="variant-options" id="colorOptions">
@@ -632,6 +654,7 @@ window.openProductModal = (id) => {
         if (product.variants.flavors && product.variants.flavors.length > 0) {
             const flavorGroup = document.createElement('div');
             flavorGroup.className = 'variant-group';
+            flavorGroup.dataset.variantGroup = 'flavor';
             flavorGroup.innerHTML = `
                 <span class="variant-label">${escapeHtml(translations[currentLang].modal.variant_flavor)}</span>
                 <div class="variant-options" id="flavorOptions">
@@ -658,18 +681,22 @@ window.openProductModal = (id) => {
 
     // Update Add to Cart button
     modalAddToCartBtn.onclick = () => {
-        // Validate Variants
+        // Validate Variants: tandai grup yang belum dipilih + gulir ke grup itu,
+        // supaya user melihat persis apa yang kurang (bukan cuma toast).
         if (product.variants) {
-            if (product.variants.sizes && !currentVariant.size) {
-                showToast('Pilih ukuran terlebih dahulu!', 'error');
-                return;
-            }
-            if (product.variants.colors && !currentVariant.color) {
-                showToast('Pilih warna terlebih dahulu!', 'error');
-                return;
-            }
-            if (product.variants.flavors && !currentVariant.flavor) {
-                showToast('Pilih rasa terlebih dahulu!', 'error');
+            const missing = [
+                ['sizes', 'size', 'select_size'],
+                ['colors', 'color', 'select_color'],
+                ['flavors', 'flavor', 'select_flavor']
+            ].find(([key, type]) => product.variants[key] && !currentVariant[type]);
+
+            if (missing) {
+                const group = variantsContainer.querySelector(`[data-variant-group="${missing[1]}"]`);
+                if (group) {
+                    group.classList.add('variant-error');
+                    group.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                showToast(translations[currentLang].toast[missing[2]], 'error');
                 return;
             }
         }
@@ -691,7 +718,7 @@ window.openProductModal = (id) => {
 
     document.getElementById('shareCopy').onclick = () => {
         navigator.clipboard.writeText(`${shareText} ${shareUrl}`).then(() => {
-            showToast('Link berhasil disalin!', 'success');
+            showToast(translations[currentLang].toast.link_copied, 'success');
         });
     };
 
@@ -717,13 +744,26 @@ window.selectVariant = (type, value, btnElement, price = null) => {
 
     // Add active to clicked
     btnElement.classList.add('active');
+
+    // Pilihan valid: bersihkan penanda error di grup ini
+    const group = btnElement.closest('.variant-group');
+    if (group) group.classList.remove('variant-error');
 };
 
 
 
+function setCouponError(message) {
+    const el = document.getElementById('couponError');
+    if (!el) return;
+    el.textContent = message || '';
+    el.hidden = !message;
+    if (couponInput) couponInput.classList.toggle('input-error', !!message);
+}
+
 window.applyCoupon = () => {
     const code = couponInput.value.trim().toUpperCase();
     if (!code) {
+        setCouponError(translations[currentLang].toast.coupon_invalid);
         showToast(translations[currentLang].toast.coupon_invalid, 'error');
         return;
     }
@@ -733,8 +773,11 @@ window.applyCoupon = () => {
 
     if (coupon) {
         activeCoupon = coupon;
+        setCouponError('');
         showToast(translations[currentLang].toast.coupon_applied, 'success');
     } else {
+        // Kode salah: tampilkan error inline di area kupon + toast, total tidak berubah.
+        setCouponError(translations[currentLang].toast.coupon_invalid);
         showToast(translations[currentLang].toast.coupon_invalid, 'error');
         return;
     }
@@ -742,9 +785,14 @@ window.applyCoupon = () => {
     renderCart();
 };
 
+if (couponInput) {
+    couponInput.addEventListener('input', () => setCouponError(''));
+}
+
 window.removeCoupon = () => {
     activeCoupon = null;
     couponInput.value = '';
+    setCouponError('');
     showToast(translations[currentLang].toast.coupon_removed, 'success');
     renderCart();
 };

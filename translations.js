@@ -35,6 +35,7 @@ const translations = {
                 favorites: "Favorit"
             },
             load_more: "Muat Lebih Banyak",
+            empty: "Tidak ada produk yang cocok. Coba kata kunci atau kategori lain.",
             badges: {
                 sale: "SALE",
                 best_seller: "Best Seller",
@@ -118,6 +119,9 @@ const translations = {
             added_to_cart: "Berhasil ditambahkan ke keranjang",
             removed_from_cart: "Produk dihapus dari keranjang",
             select_variant: "Silakan pilih varian terlebih dahulu",
+            select_size: "Pilih ukuran terlebih dahulu!",
+            select_color: "Pilih warna terlebih dahulu!",
+            select_flavor: "Pilih rasa terlebih dahulu!",
             coupon_applied: "Kupon diterapkan!",
             coupon_invalid: "Kode kupon tidak valid!",
             coupon_removed: "Kupon dihapus",
@@ -158,6 +162,7 @@ const translations = {
                 favorites: "Favorites"
             },
             load_more: "Load More",
+            empty: "No products match. Try another keyword or category.",
             badges: {
                 sale: "SALE",
                 best_seller: "Best Seller",
@@ -242,6 +247,9 @@ const translations = {
             added_to_cart: "Successfully added to cart",
             removed_from_cart: "Product removed from cart",
             select_variant: "Please select a variant first",
+            select_size: "Please select a size first!",
+            select_color: "Please select a color first!",
+            select_flavor: "Please select a flavor first!",
             coupon_applied: "Coupon applied!",
             coupon_invalid: "Invalid coupon code!",
             coupon_removed: "Coupon removed",
