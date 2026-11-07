@@ -7,7 +7,7 @@
 
   [Lihat demo](https://aqles.github.io/baz-on)
 
-  <img src="images/desktop-preview.png" alt="Tampilan Baz-On di desktop" width="800" />
+  <img src="images/preview.jpg" alt="Tampilan Baz-On di desktop" width="800" />
 </div>
 
 ## Isinya apa aja
