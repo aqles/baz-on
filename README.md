@@ -1,114 +1,85 @@
 <div align="center">
-  <img src="logo.svg" alt="Baz-On Logo" width="120" />
+  <img src="logo.svg" alt="Logo Baz-On" width="110" />
 
-  # Baz-On Store
-  
-  **Premium Static E-Commerce Template**
-  
-  [View Demo](https://aqles.github.io/baz-on)
-  
-  ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
-  ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
-  ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+  # Baz-On
 
-  <img src="images/desktop-preview.png" alt="Desktop Preview" width="800" style="border-radius: 10px; margin: 20px 0;"/>
+  Toko online statis. Nggak ada backend, nggak ada database — pembeli milih barang, masukin ke keranjang, lalu checkout-nya dikirim sebagai pesan WhatsApp ke penjual.
+
+  [Lihat demo](https://aqles.github.io/baz-on)
+
+  <img src="images/desktop-preview.png" alt="Tampilan Baz-On di desktop" width="800" />
 </div>
 
----
+## Isinya apa aja
 
-## About The Project
+Barang yang dijual campur-campur kayak bazaar beneran: fashion, jam tangan, sneakers, tas, headset, kue, sampai jasa bungkus kado dan cuci sepatu. Total 12 produk contoh, semuanya diatur dari satu file `data.js`.
 
-Baz-On Store is a high-performance static e-commerce template designed to offer a premium shopping experience without the complexity of a backend. Built with a focus on modern aesthetics, it utilizes glassmorphism, smooth animations, and a responsive layout to engage users across all devices.
+Yang bisa dilakukan pengunjung:
 
-The core philosophy of this project is **simplicity meets elegance**. It bridges the gap between digital browsing and personalized service by generating pre-formatted WhatsApp orders at checkout, allowing for a direct and human-centric purchasing process.
+- Liat-liat katalog, cari produk, filter per kategori, urutkan dari harga atau nama
+- Buka detail produk: foto, rating, stok, spesifikasi, pilihan ukuran/warna/rasa (beberapa varian punya harga sendiri)
+- Simpan produk ke favorit/wishlist
+- Masukkan ke keranjang, atur jumlahnya, pakai kode kupon (`BAZON10` diskon 10%, `HEMAT50` potongan Rp50.000)
+- Checkout: isi nama, nomor WhatsApp, alamat, metode pembayaran — pesanan terkirim ke WhatsApp penjual dalam bentuk pesan yang sudah rapi
+- Ganti bahasa Indonesia/Inggris dan ganti tema gelap/terang (pilihannya diingat browser)
+- Keranjang, wishlist, dan alamat pembeli tersimpan di localStorage, jadi nggak hilang pas halaman ditutup
 
-### Key Features
+Ada juga slider banner di halaman depan, hitung mundur flash sale, testimoni, halaman Tentang/Kontak/Syarat & Ketentuan, dan halaman panduan install.
 
-*   **Dynamic Hero Slider**: An engaging, touch-responsive slideshow that highlights featured collections with auto-play and manual navigation.
-*   **Enhanced Shopping Experience**:
-    *   **Product Variants**: Support for multiple product variations like Sizes (S, M, L) and Colors.
-    *   **Product Sorting & Discounts**: Sort products by price/name and view special "Sale" offers.
-    *   **Trust Signals**: Verified badges for Free Shipping, Secure Payment, and more.
-    *   **Dynamic Testimonials**: A responsive customer review slider to build credibility.
-    *   **Detailed Product View**: Comprehensive product modals with star ratings, stock status, variant selection, and technical specifications.
-    *   **Quick View Modal**: Detailed product previews with zoom-on-hover logic for desktop.
-    *   **Wishlist System**: Extensive "Add to Favorites" functionality with instant visual feedback.
-    *   **Coupon System**: Apply discount codes (percentage or fixed amount) at checkout.
-    *   **Flash Sale Countdown**: Urgency-inducing countdown timer for special promotions, now fully configurable.
-    *   **Smart Filtering**: Instant search and category filtering for seamless navigation.
-    *   **Product Badges**: "Best Seller" and "Limited Stock" labels to guide user attention.
-    *   **Social Sharing**: Integrated share buttons (WhatsApp, Twitter, Copy Link) in product details.
-*   **Progressive Web App (PWA)**:
-    *   **Smart Installation**: Custom install alert toast notifies users when the app can be installed.
-    *   **Installation Guide**: Dedicated guide (`install.html`) for Android, iOS, and Desktop users.
-    *   **Offline Mode**: Browse key pages even without an internet connection.
-*   **Dual Language Support (ID/EN)**:
-    *   **Language Toggle**: Switch seamlessly between Indonesian and English.
-    *   **Auto-Persistence**: Remembers your language preference for future visits.
-*   **Modern User Interface**:
-    *   **Glassmorphism Design**: Sleek, translucent elements that provide depth and hierarchy.
-    *   **Toast Notifications**: Non-intrusive, animated alerts for user actions (e.g., "Added to Cart").
-    *   **Scroll to Top**: Handy button for quick navigation on long pages.
-    *   **Theme Customization**: Easy-to-edit CSS variables for Dark/Light mode.
-    *   **Dark Mode Aesthetic**: A carefully curated color palette optimized for visual comfort and luxury appeal.
-*   **SEO & Performance**:
-    *   **SEO Optimized**: Includes Sitemap, Robots.txt, Meta Tags, and JSON-LD Structured Data.
-    *   **Accessibility**: Full ARIA support for better screen reader compatibility.
-*   **Seamless Checkout**:
-    *   **Persistent Cart**: LocalStorage integration ensures shopping carts are saved between sessions.
-    *   **Address Auto-Save**: Remembers customer details (Name, Phone, Address) for faster future checkouts.
-    *   **WhatsApp Integration**: Automatically generates a detailed order summary (including selected variants) and redirects to WhatsApp for payment processing.
+## Jalanin di komputer sendiri
 
-## Tech Stack
+Nggak perlu install apa-apa. Cukup server statis biasa:
 
-This project allows for maximum customization and zero dependency issues by using **Pure Vanilla Web Technologies**:
+```bash
+git clone https://github.com/aqles/baz-on.git
+cd baz-on
+python3 -m http.server 8000
+```
 
-*   **HTML5**: Semantic structure for better accessibility and SEO.
-*   **CSS3**: Advanced styling using Custom Properties (Variables), Flexbox, and Grid. No external CSS frameworks (like Tailwind or Bootstrap) were used, ensuring complete control over the design system.
-*   **JavaScript (ES6+)**: Specialized logic for state management (Cart/Wishlist), DOM manipulation, and interactive features without heavy libraries (like React or Vue).
-*   **PWA**: Service Workers and Manifest for offline capability and app installation.
+Lalu buka `http://localhost:8000`. Pakai server lokal kayak gini (bukan klik dua kali file-nya) supaya service worker dan fitur PWA-nya jalan beneran.
 
-## Installation & Setup
+## Ngatur isinya
 
-To run this project locally:
+Hampir semua isi toko diatur dari **`data.js`**:
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/aqles/baz-on.git
-    ```
-2.  **Open the project**
-    Simply navigate to the project folder and open `index.html` in your web browser. 
-    
-    *Recommendation*: Use a local development server (e.g., Live Server for VS Code) for the best experience with asset loading and routing.
+- `products` — daftar produk. Tiap produk punya `name`, `price` (angka, tanpa titik), `category`, `image`, `description`, plus pilihan `rating`, `reviews`, `stock`, `specs`, `badge` (`best-seller` atau `limited`), dan `variants` (ukuran, warna, rasa).
+- `heroSlides` — banner geser di halaman depan.
+- `testimonials` — testimoni pembeli.
+- `config` — pengaturan toko:
+  - `whatsappNumber` — nomor tujuan checkout. **Nomor bawaan `6281234567890` itu cuma contoh. Wajib diganti nomor aslimu sebelum toko ini dipakai jualan beneran**, kalau nggak pesanan pembeli nyasar ke nomor contoh itu.
+  - `enableFlashSale` dan `flashSaleDurationHours` — nyala/mati dan durasi flash sale.
+  - `maxProducts` — jumlah produk yang tampil sebelum tombol "Muat Lebih Banyak" (isi `0` untuk tampilkan semua).
+  - `coupons` — daftar kode kupon, tipe `percent` atau `fixed`.
 
-## Customization
+Teks antarmuka dua bahasa diatur di **`translations.js`** (kunci `id` dan `en`). Warna dan tema diatur dari variabel CSS paling atas di **`style.css`** — satu warna aksen, satu warna latar, sisanya mengikuti.
 
-### Content Management (New!)
-All website content is now separated into **`data.js`** for easier editing:
-*   **Products**: Add/Remove items in the `products` array. 
-    *   New fields supported: `rating`, `reviews`, `stock`, `specs`, and `variants` (sizes/colors).
-    *   Add `badge: 'best-seller'` or `'limited'` for special labels.
-*   **Slides**: Edit the `heroSlides` array for banners.
-*   **Testimonials**: Manage reviews in the `testimonials` array.
+Nomor WhatsApp contoh yang sama juga masih tampil di halaman Kontak dan data JSON-LD di `index.html`. Kalau ganti nomor, ganti di tiga tempat itu sekalian.
 
-### Translations
-Language strings are managed in **`translations.js`**:
-*   Edit text for Navbar, Hero, Products, and Modals in the `translations` object (supports `id` and `en`).
+## PWA dan offline
 
-### Configuration
-Everything is now centralized in the `config` object within **`data.js`**:
-*   **WhatsApp Number**: Change the `whatsappNumber` field.
-*   **Flash Sale**: Toggle with `enableFlashSale` and adjust duration with `flashSaleDurationHours`.
-*   **Homepage Products**: Limit the number of products displayed with `maxProducts`.
-*   **Coupons**: Add or edit codes in the `coupons` array (supports `type: 'percent'` or `'fixed'`).
-*   **Theme Colors**: Edit CSS Variables in `style.css` (Top Section) to change the color scheme.
+`manifest.json` + `sw.js` bikin toko ini bisa di-install kayak aplikasi (ada panduan langkah-langkahnya di `install.html` untuk Android, iOS, dan desktop). Service worker menyimpan file-file inti, jadi halaman yang sudah pernah dibuka tetap bisa diakses pas offline; kalau koneksinya putus di tengah jalan, yang muncul halaman `offline.html`.
 
-## License
+## Struktur file
 
-Distributed under the MIT License. Please see the `LICENSE` file for more information.
+```
+index.html        halaman utama (katalog, keranjang, checkout)
+about.html        tentang toko
+contact.html      kontak + form pesan
+install.html      panduan install PWA
+terms.html        syarat & ketentuan
+404.html          halaman tidak ditemukan
+offline.html      halaman saat offline
+data.js           produk, banner, testimoni, dan config toko
+translations.js   teks Bahasa Indonesia & Inggris
+script.js         semua logika (keranjang, wishlist, slider, kupon, checkout)
+style.css         semua gaya, termasuk tema gelap/terang
+sw.js             service worker (cache offline)
+manifest.json     manifest PWA
+images/           foto produk
+```
 
----
+Teknologinya sengaja polos: HTML, CSS, dan JavaScript biasa tanpa framework dan tanpa proses build. Ikon pakai Font Awesome dari CDN, font-nya Outfit dari Google Fonts.
 
-<div align="center">
-  <p>Created by <a href="https://github.com/aqles">Aqles</a></p>
-</div>
+## Lisensi
+
+MIT — lihat [LICENSE](LICENSE).
