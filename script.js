@@ -14,16 +14,16 @@ function renderTestimonials() {
     testimonialTrack.innerHTML = testimonials.map(item => `
         <div class="testimonial-card">
             <div class="testimonial-header">
-                <img src="${item.image}" alt="${item.name}" class="testimonial-avatar">
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" class="testimonial-avatar">
                 <div>
-                    <h4 class="testimonial-name">${item.name}</h4>
-                    <span class="testimonial-role">${item.role}</span>
+                    <h4 class="testimonial-name">${escapeHtml(item.name)}</h4>
+                    <span class="testimonial-role">${escapeHtml(item.role)}</span>
                 </div>
             </div>
             <div class="testimonial-rating">
-                ${Array(item.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
+                ${Array(Math.max(0, Math.min(5, Number(item.rating) || 0))).fill('<i class="fa-solid fa-star"></i>').join('')}
             </div>
-            <p class="testimonial-text">"${item.text}"</p>
+            <p class="testimonial-text">"${escapeHtml(item.text)}"</p>
         </div>
     `).join('');
 
@@ -120,9 +120,18 @@ const formatPrice = (price) => {
     }).format(price);
 };
 
+// Escape semua data sebelum masuk ke innerHTML (nama produk, testimoni, varian, dll)
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+}[c]));
+
+function saveWishlist() {
+    localStorage.setItem('bazon_wishlist', JSON.stringify(wishlist));
+}
+
 function saveCart() {
     localStorage.setItem('bazon_cart', JSON.stringify(cart));
-    cartCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+    if (cartCountElement) cartCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
 }
 
 function showToast(message, type = 'info') {
@@ -160,6 +169,7 @@ if (loadMoreBtn) {
 
 // --- Fungsi Render (Tampilan) ---
 function renderProducts(category = 'all', searchTerm = '') {
+    if (!productGrid) return;
     // Keep track of active category for Load More
     activeCategory = category;
 
@@ -217,44 +227,45 @@ function renderProducts(category = 'all', searchTerm = '') {
         const hasBadge = !!product.badge;
 
         let badgeHtml = '';
+        const badgeClass = product.badge === 'best-seller' || product.badge === 'limited' ? product.badge : '';
 
         // Logika Badge: Bergantian jika ada diskon & badge, statis jika cuma satu
-        if (hasDiscount && hasBadge) {
+        if (hasDiscount && hasBadge && badgeClass) {
             const badgeLabel = product.badge === 'best-seller' ? translations[currentLang].products.badges.best_seller : translations[currentLang].products.badges.limited_stock;
             badgeHtml = `
-                <div class="sale-badge badge-anim-1">${translations[currentLang].products.badges.sale}</div>
-                <div class="product-badge ${product.badge} badge-anim-2">${badgeLabel}</div>
+                <div class="sale-badge badge-anim-1">${escapeHtml(translations[currentLang].products.badges.sale)}</div>
+                <div class="product-badge ${badgeClass} badge-anim-2">${escapeHtml(badgeLabel)}</div>
              `;
         } else if (hasDiscount) {
-            badgeHtml = `<div class="sale-badge">${translations[currentLang].products.badges.sale}</div>`;
-        } else if (hasBadge) {
+            badgeHtml = `<div class="sale-badge">${escapeHtml(translations[currentLang].products.badges.sale)}</div>`;
+        } else if (hasBadge && badgeClass) {
             const badgeLabel = product.badge === 'best-seller' ? translations[currentLang].products.badges.best_seller : translations[currentLang].products.badges.limited_stock;
-            badgeHtml = `<div class="product-badge ${product.badge}">${badgeLabel}</div>`;
+            badgeHtml = `<div class="product-badge ${badgeClass}">${escapeHtml(badgeLabel)}</div>`;
         }
 
         return `
         <div class="product-card">
             ${badgeHtml}
-            <button class="btn-wishlist ${isWishlist ? 'active' : ''}" onclick="toggleWishlist(${product.id})">
-                <i class="fa-${isWishlist ? 'solid' : 'regular'} fa-heart"></i>
-            </button>
             <div class="product-image-container">
-                <img src="${product.image}" loading="lazy" alt="${product.name}" class="product-image">
+                <img src="${escapeHtml(product.image)}" loading="lazy" alt="${escapeHtml(product.name)}" class="product-image">
             </div>
             <div class="product-info">
-                <div class="product-category">${product.category}</div>
-                <h3 class="product-title">${product.name}</h3>
-                
+                <div class="product-category">${escapeHtml(product.category)}</div>
+                <h3 class="product-title">${escapeHtml(product.name)}</h3>
+
                 <div class="product-price-container">
                     ${hasDiscount ? `<div class="original-price">${formatPrice(product.originalPrice)}</div>` : ''}
                     <div class="current-price ${hasDiscount ? 'discounted' : ''}">${formatPrice(product.price)}</div>
                 </div>
 
                 <div class="product-action-buttons">
-                    <button class="btn-add-cart" onclick="addToCart(${product.id})">
-                        <i class="fa-solid fa-cart-plus"></i> <span data-i18n="modal.add_to_cart">${translations[currentLang].modal.add_to_cart}</span>
+                    <button class="btn-add-cart" data-action="add" data-id="${Number(product.id)}">
+                        <i class="fa-solid fa-cart-plus"></i> <span>${escapeHtml(translations[currentLang].modal.add_to_cart)}</span>
                     </button>
-                    <button class="btn-secondary" onclick="openProductModal(${product.id})" style="margin-top: 10px; width: 100%;">
+                    <button class="btn-wishlist ${isWishlist ? 'active' : ''}" data-action="wishlist" data-id="${Number(product.id)}" aria-label="Wishlist ${escapeHtml(product.name)}" aria-pressed="${isWishlist}">
+                        <i class="fa-${isWishlist ? 'solid' : 'regular'} fa-heart"></i>
+                    </button>
+                    <button class="btn-secondary btn-detail" data-action="detail" data-id="${Number(product.id)}">
                         Detail
                     </button>
                 </div>
@@ -264,7 +275,8 @@ function renderProducts(category = 'all', searchTerm = '') {
     }).join('');
 }
 function renderCart() {
-    cartCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+    if (cartCountElement) cartCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+    if (!cartItemsContainer || !cartSummary) return;
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<div class="empty-cart-message">Keranjang Anda kosong</div>';
@@ -278,35 +290,37 @@ function renderCart() {
     // Render Items
     cartItemsContainer.innerHTML = cart.map(item => {
         const product = products.find(p => p.id === item.id);
-        const currentPrice = item.price || product.price;
+        const currentPrice = item.price || (product ? product.price : 0);
+
+        if (!product) return '';
 
         // Variant Text
         let variantText = '';
         if (item.variants) {
             const parts = [];
-            if (item.variants.size) parts.push(`Size: ${item.variants.size}`);
-            if (item.variants.color) parts.push(`Color: ${item.variants.color}`);
-            if (item.variants.flavor) parts.push(`Rasa: ${item.variants.flavor}`);
+            if (item.variants.size) parts.push(`Size: ${escapeHtml(item.variants.size)}`);
+            if (item.variants.color) parts.push(`Color: ${escapeHtml(item.variants.color)}`);
+            if (item.variants.flavor) parts.push(`Rasa: ${escapeHtml(item.variants.flavor)}`);
             variantText = parts.length > 0 ? `<div class="cart-variant-info">${parts.join(', ')}</div>` : '';
         }
 
         // We need a unique composite ID for removing items from cart
-        const cartItemId = item.cartId || item.id; // Backward compatibility
+        const cartItemId = item.cartId || String(item.id); // Backward compatibility
 
         return `
             <div class="cart-item">
-                <img src="${product.image}" alt="${product.name}" class="cart-item-img">
+                <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="cart-item-img">
                 <div class="cart-item-details">
-                    <div class="cart-item-title">${product.name}</div>
+                    <div class="cart-item-title">${escapeHtml(product.name)}</div>
                     ${variantText}
                     <div class="cart-item-price">${formatPrice(currentPrice)}</div>
                     <div class="cart-item-controls">
                         <div class="quantity-controls">
-                            <button class="btn-qty" onclick="updateQuantity('${cartItemId}', -1)"><i class="fa-solid fa-minus"></i></button>
-                            <span>${item.quantity}</span>
-                            <button class="btn-qty" onclick="updateQuantity('${cartItemId}', 1)"><i class="fa-solid fa-plus"></i></button>
+                            <button class="btn-qty" data-cart-action="dec" data-cart-id="${escapeHtml(cartItemId)}" aria-label="Kurangi jumlah"><i class="fa-solid fa-minus"></i></button>
+                            <span>${Number(item.quantity) || 0}</span>
+                            <button class="btn-qty" data-cart-action="inc" data-cart-id="${escapeHtml(cartItemId)}" aria-label="Tambah jumlah"><i class="fa-solid fa-plus"></i></button>
                         </div>
-                        <button class="btn-remove" onclick="removeFromCart('${cartItemId}')"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn-remove" data-cart-action="remove" data-cart-id="${escapeHtml(cartItemId)}" aria-label="Hapus dari keranjang"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             </div>
@@ -316,7 +330,7 @@ function renderCart() {
     // Calculate Totals using stored price or product price
     let total = cart.reduce((sum, item) => {
         const product = products.find(p => p.id === item.id);
-        const price = item.price || product.price;
+        const price = item.price || (product ? product.price : 0);
         return sum + (price * item.quantity);
     }, 0);
 
@@ -339,7 +353,7 @@ function renderCart() {
         </div>
         ${activeCoupon ? `
         <div class="cart-discount">
-            <span>${translations[currentLang].cart.discount} (${activeCoupon.code})</span>
+            <span>${translations[currentLang].cart.discount} (${escapeHtml(activeCoupon.code)})</span>
             <span>- ${formatPrice(discountAmount)}</span>
         </div>
         ` : ''}
@@ -350,6 +364,7 @@ function renderCart() {
     `;
 
     // Manage Coupon UI State
+    if (!couponInput || !applyCouponBtn || !removeCouponBtn) return;
     if (activeCoupon) {
         couponInput.value = activeCoupon.code;
         couponInput.disabled = true;
@@ -401,9 +416,10 @@ window.addToCart = (productId, fromModal = false) => {
     showToast(translations[currentLang].toast.added_to_cart, 'success');
 };
 
+const cartKey = (item) => item.cartId || String(item.id);
+
 window.updateQuantity = (cartItemId, change) => {
-    // Note: cartItemId is now string for variants
-    const item = cart.find(item => item.cartId == cartItemId || (item.id == cartItemId && !item.cartId));
+    const item = cart.find(item => cartKey(item) === String(cartItemId));
     if (!item) return;
 
     item.quantity += change;
@@ -417,10 +433,18 @@ window.updateQuantity = (cartItemId, change) => {
 };
 
 window.removeFromCart = (cartItemId) => {
-    cart = cart.filter(item => item.cartId != cartItemId && item.id != cartItemId);
+    cart = cart.filter(item => cartKey(item) !== String(cartItemId));
     saveCart();
     renderCart();
     showToast(translations[currentLang].toast.removed_from_cart, 'error');
+};
+
+// Wishlist: tadinya tombolnya manggil fungsi yang tidak pernah ada — sekarang beneran jalan + persisten
+window.toggleWishlist = (productId) => {
+    const id = Number(productId);
+    wishlist = wishlist.includes(id) ? wishlist.filter(w => w !== id) : [...wishlist, id];
+    saveWishlist();
+    renderProducts(activeCategory, searchInput ? searchInput.value : '');
 };
 
 
@@ -449,8 +473,7 @@ function openCheckoutModal() {
         checkboxGroup.className = 'save-address-group';
         checkboxGroup.innerHTML = `
             <input type="checkbox" id="saveAddressCheckbox" checked>
-            <input type="checkbox" id="saveAddressCheckbox" checked>
-            <label for="saveAddressCheckbox">${translations[currentLang].checkout.save_address}</label>
+            <label for="saveAddressCheckbox">${escapeHtml(translations[currentLang].checkout.save_address)}</label>
          `;
         // Insert before submit button (last element)
         form.insertBefore(checkboxGroup, form.lastElementChild);
@@ -475,13 +498,14 @@ window.processOrder = () => {
         localStorage.setItem('bazon_user_data', JSON.stringify(userData));
     }
 
-    const br = '%0A';
-    let message = `Halo Admin, saya ingin memesan:${br}${br}`;
+    let message = 'Halo Admin, saya ingin memesan:\n\n';
     let total = 0;
 
     cart.forEach((item, index) => {
         const product = products.find(p => p.id === item.id);
-        const itemTotal = product.price * item.quantity;
+        if (!product) return;
+        const unitPrice = item.price || product.price;
+        const itemTotal = unitPrice * item.quantity;
         total += itemTotal;
 
         let variantInfo = '';
@@ -489,13 +513,14 @@ window.processOrder = () => {
             const parts = [];
             if (item.variants.size) parts.push(`Size: ${item.variants.size}`);
             if (item.variants.color) parts.push(`Color: ${item.variants.color}`);
+            if (item.variants.flavor) parts.push(`Rasa: ${item.variants.flavor}`);
             if (parts.length > 0) variantInfo = ` (${parts.join(', ')})`;
         }
 
-        message += `${index + 1}. ${product.name}${variantInfo} (x${item.quantity}) - ${formatPrice(itemTotal)}${br}`;
+        message += `${index + 1}. ${product.name}${variantInfo} (x${item.quantity}) - ${formatPrice(itemTotal)}\n`;
     });
 
-    message += `${br}Total: *${formatPrice(total)}*${br}`;
+    message += `\nTotal: *${formatPrice(total)}*\n`;
 
     if (activeCoupon) {
         let discountAmount = 0;
@@ -506,19 +531,19 @@ window.processOrder = () => {
         }
         if (discountAmount > total) discountAmount = total;
 
-        message += `Diskon (${activeCoupon.code}): -${formatPrice(discountAmount)}${br}`;
-        message += `*Grand Total: ${formatPrice(total - discountAmount)}*${br}${br}`;
+        message += `Diskon (${activeCoupon.code}): -${formatPrice(discountAmount)}\n`;
+        message += `*Grand Total: ${formatPrice(total - discountAmount)}*\n\n`;
     } else {
-        message += `${br}`;
+        message += `\n`;
     }
-    message += `📋 Data Pemesan:${br}`;
-    message += `Nama: ${name}${br}`;
-    message += `No. HP: ${phone}${br}`;
-    message += `Alamat: ${address}${br}`;
-    message += `Pembayaran: ${payment}${br}`;
-    message += `${br}Mohon diproses. Terima kasih!`;
+    message += `Data Pemesan:\n`;
+    message += `Nama: ${name}\n`;
+    message += `No. HP: ${phone}\n`;
+    message += `Alamat: ${address}\n`;
+    message += `Pembayaran: ${payment}\n`;
+    message += `\nMohon diproses. Terima kasih!`;
 
-    const whatsappUrl = `https://wa.me/${config.whatsappNumber}?text=${message}`;
+    const whatsappUrl = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
     showToast(translations[currentLang].toast.redirecting, 'success');
@@ -547,7 +572,7 @@ window.openProductModal = (id) => {
 
     document.getElementById('modalProductRating').innerHTML = `
         ${starHtml}
-        <span>(${product.reviews || 0} Ulasan)</span>
+        <span>(${Number(product.reviews) || 0} Ulasan)</span>
     `;
 
     // ... (Stock logic same) ...
@@ -572,14 +597,13 @@ window.openProductModal = (id) => {
             const sizeGroup = document.createElement('div');
             sizeGroup.className = 'variant-group';
             sizeGroup.innerHTML = `
-                <span class="variant-label">${translations[currentLang].modal.variant_size}</span>
+                <span class="variant-label">${escapeHtml(translations[currentLang].modal.variant_size)}</span>
                 <div class="variant-options" id="sizeOptions">
                     ${product.variants.sizes.map(size => {
                 const isObject = typeof size === 'object';
                 const val = isObject ? size.name : size;
                 const price = isObject ? size.price : null;
-                const priceAttr = price ? `, ${price}` : '';
-                return `<button class="variant-btn" onclick="selectVariant('size', '${val}', this${priceAttr})">${val}</button>`;
+                return `<button type="button" class="variant-btn" data-variant-type="size" data-variant-value="${escapeHtml(val)}"${price ? ` data-variant-price="${Number(price)}"` : ''}>${escapeHtml(val)}</button>`;
             }).join('')}
                 </div>
              `;
@@ -591,14 +615,13 @@ window.openProductModal = (id) => {
             const colorGroup = document.createElement('div');
             colorGroup.className = 'variant-group';
             colorGroup.innerHTML = `
-                <span class="variant-label">${translations[currentLang].modal.variant_color}</span>
+                <span class="variant-label">${escapeHtml(translations[currentLang].modal.variant_color)}</span>
                 <div class="variant-options" id="colorOptions">
                     ${product.variants.colors.map(color => {
                 const isObject = typeof color === 'object';
                 const val = isObject ? color.name : color;
                 const price = isObject ? color.price : null;
-                const priceAttr = price ? `, ${price}` : '';
-                return `<button class="variant-btn" onclick="selectVariant('color', '${val}', this${priceAttr})">${val}</button>`;
+                return `<button type="button" class="variant-btn" data-variant-type="color" data-variant-value="${escapeHtml(val)}"${price ? ` data-variant-price="${Number(price)}"` : ''}>${escapeHtml(val)}</button>`;
             }).join('')}
                 </div>
              `;
@@ -610,14 +633,13 @@ window.openProductModal = (id) => {
             const flavorGroup = document.createElement('div');
             flavorGroup.className = 'variant-group';
             flavorGroup.innerHTML = `
-                <span class="variant-label">${translations[currentLang].modal.variant_flavor}</span>
+                <span class="variant-label">${escapeHtml(translations[currentLang].modal.variant_flavor)}</span>
                 <div class="variant-options" id="flavorOptions">
                     ${product.variants.flavors.map(flavor => {
                 const isObject = typeof flavor === 'object';
                 const val = isObject ? flavor.name : flavor;
                 const price = isObject ? flavor.price : null;
-                const priceAttr = price ? `, ${price}` : '';
-                return `<button class="variant-btn" onclick="selectVariant('flavor', '${val}', this${priceAttr})">${val}</button>`;
+                return `<button type="button" class="variant-btn" data-variant-type="flavor" data-variant-value="${escapeHtml(val)}"${price ? ` data-variant-price="${Number(price)}"` : ''}>${escapeHtml(val)}</button>`;
             }).join('')}
                 </div>
              `;
@@ -628,7 +650,7 @@ window.openProductModal = (id) => {
     // Spec logic same
     const specsList = document.getElementById('modalProductSpecs');
     if (product.specs && product.specs.length > 0) {
-        specsList.innerHTML = product.specs.map(spec => `<li>${spec}</li>`).join('');
+        specsList.innerHTML = product.specs.map(spec => `<li>${escapeHtml(spec)}</li>`).join('');
         document.querySelector('.modal-specs-container').style.display = 'block';
     } else {
         document.querySelector('.modal-specs-container').style.display = 'none';
@@ -743,15 +765,17 @@ filterBtns.forEach(btn => {
         // Filter
         activeCategory = btn.dataset.category;
         currentProductLimit = config.maxProducts || 8; // Reset Pagination
-        renderProducts(activeCategory, searchInput.value);
+        renderProducts(activeCategory, searchInput ? searchInput.value : '');
     });
 });
 
 // event listener untuk pencarian
-searchInput.addEventListener('input', (e) => {
-    currentProductLimit = config.maxProducts || 8; // Reset Pagination
-    renderProducts(activeCategory, e.target.value);
-});
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        currentProductLimit = config.maxProducts || 8; // Reset Pagination
+        renderProducts(activeCategory, e.target.value);
+    });
+}
 
 // --- Logika Slider / Banner ---
 let currentSlide = 0;
@@ -765,25 +789,28 @@ function initSlider() {
 
     if (!sliderWrapper) return; // Guard clause
 
-    // Render Slides
-    sliderWrapper.innerHTML = heroSlides.map((slide, index) => `
-        <div class="slide ${index === 0 ? 'active' : ''}" style="min-width: 100%;">
+    // Render Slides (judul slide = teks polos dari data.js, selalu di-escape)
+    sliderWrapper.innerHTML = heroSlides.map((slide, index) => {
+        const link = typeof slide.link === 'string' && slide.link.startsWith('#') ? slide.link : '#products';
+        return `
+        <div class="slide ${index === 0 ? 'active' : ''}">
             <div class="slide-content">
                 <div class="slide-text">
-                    <h1>${slide.title}</h1>
-                    <p>${slide.description}</p>
-                    <a href="${slide.link}" class="btn-primary">${slide.cta}</a>
+                    ${index === 0 ? `<h1>${escapeHtml(slide.title)}</h1>` : `<h2>${escapeHtml(slide.title)}</h2>`}
+                    <p>${escapeHtml(slide.description)}</p>
+                    <a href="${escapeHtml(link)}" class="btn-primary">${escapeHtml(slide.cta)}</a>
                 </div>
                 <div class="slide-image-wrapper">
-                    <img src="${slide.image}" alt="Slide Image" class="slide-image">
+                    <img src="${escapeHtml(slide.image)}" alt="${escapeHtml(slide.title)}" class="slide-image" width="640" height="640">
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 
     // Render Dots
     sliderDots.innerHTML = heroSlides.map((_, index) => `
-        <div class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
+        <button type="button" class="dot ${index === 0 ? 'active' : ''}" data-slide="${index}" aria-label="Slide ${index + 1}"></button>
     `).join('');
 
     // Event Listeners
@@ -845,6 +872,70 @@ function resetAutoPlay() {
     startAutoPlay();
 }
 
+// --- Event Delegation (pengganti inline onclick di HTML hasil render) ---
+if (productGrid) {
+    productGrid.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = Number(btn.dataset.id);
+        if (btn.dataset.action === 'wishlist') toggleWishlist(id);
+        else if (btn.dataset.action === 'add') addToCart(id);
+        else if (btn.dataset.action === 'detail') openProductModal(id);
+    });
+}
+
+if (cartItemsContainer) {
+    cartItemsContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-cart-action]');
+        if (!btn) return;
+        const cartId = btn.dataset.cartId;
+        if (btn.dataset.cartAction === 'inc') updateQuantity(cartId, 1);
+        else if (btn.dataset.cartAction === 'dec') updateQuantity(cartId, -1);
+        else if (btn.dataset.cartAction === 'remove') removeFromCart(cartId);
+    });
+}
+
+const modalVariantsEl = document.getElementById('modalVariants');
+if (modalVariantsEl) {
+    modalVariantsEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-variant-type]');
+        if (!btn) return;
+        const price = btn.dataset.variantPrice ? Number(btn.dataset.variantPrice) : null;
+        selectVariant(btn.dataset.variantType, btn.dataset.variantValue, btn, price);
+    });
+}
+
+const sliderDotsEl = document.getElementById('sliderDots');
+if (sliderDotsEl) {
+    sliderDotsEl.addEventListener('click', (e) => {
+        const dot = e.target.closest('[data-slide]');
+        if (dot) goToSlide(Number(dot.dataset.slide));
+    });
+}
+
+const flashShopBtn = document.getElementById('flashShopBtn');
+if (flashShopBtn) {
+    flashShopBtn.addEventListener('click', () => {
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    });
+}
+
+if (cartBtn) {
+    cartBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            cartModal.classList.add('active');
+        }
+    });
+}
+
+// Dialog tertutup disembunyikan dari accessibility tree, dibuka lagi saat aktif
+document.querySelectorAll('.modal-overlay, .cart-modal-overlay').forEach((overlay) => {
+    new MutationObserver(() => {
+        overlay.setAttribute('aria-hidden', overlay.classList.contains('active') ? 'false' : 'true');
+    }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+});
+
 // --- Inisialisasi Awal ---
 document.addEventListener('DOMContentLoaded', () => {
     initLanguage(); // Initialize Language First
@@ -893,13 +984,14 @@ function updateLanguage(lang) {
 
     // 4. Re-render dynamic components to reflect text changes
     renderCart();
-    renderProducts(activeCategory, searchInput.value);
+    renderProducts(activeCategory, searchInput ? searchInput.value : '');
     // renderTestimonials(); // Testimonials are mostly static data, but title is handled by data-i18n
 }
 
 // --- Logika Tema (Dark/Light Mode) ---
 function initTheme() {
     const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
     const icon = themeToggle.querySelector('i');
     const savedTheme = localStorage.getItem('bazon_theme') || 'dark';
 
@@ -925,101 +1017,50 @@ function updateThemeIcon(icon, theme) {
 }
 
 // --- Logika Install PWA ---
+// Tombol Install muncul di navbar saat browser menyatakan aplikasi bisa di-install.
+// Tidak ada pop-up melayang: pengunjung sendiri yang memutuskan kapan mengkliknya.
 let deferredPrompt;
 
-// Fungsi untuk menampilkan Alert Install
-function showInstallAlert() {
-    // Cek jika sudah pernah di-close sebelumnya (opsional, saat ini kita tampilkan terus jika bisa install)
-    // if (localStorage.getItem('bazon_install_dismissed')) return;
-
-    // Create Element
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'install-alert';
-    alertDiv.innerHTML = `
-        <div class="install-alert-content">
-            <i class="fa-solid fa-download"></i>
-            <span>Install Aplikasi Baz-On untuk pengalaman lebih baik!</span>
-        </div>
-        <div class="install-alert-actions">
-            <button id="alertInstallBtn" class="btn-primary-sm">Install</button>
-            <button id="alertCloseBtn" class="btn-text">Nanti</button>
-        </div>
-    `;
-
-    document.body.appendChild(alertDiv);
-
-    // Trigger Animation
-    setTimeout(() => {
-        alertDiv.classList.add('show');
-    }, 100);
-
-    // Event Listeners
-    const installBtn = document.getElementById('alertInstallBtn');
-    const closeBtn = document.getElementById('alertCloseBtn');
-
-    if (installBtn) {
-        installBtn.addEventListener('click', () => {
-            // Hide the app provided install promotion
-            alertDiv.classList.remove('show');
-            setTimeout(() => { alertDiv.remove(); }, 400);
-
-            // Show the install prompt
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the A2HS prompt');
-                    } else {
-                        console.log('User dismissed the A2HS prompt');
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        });
-    }
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            alertDiv.classList.remove('show');
-            setTimeout(() => { alertDiv.remove(); }, 400);
-            // Opsional: Simpan state bahwa usernya menolak sementara
-            // localStorage.setItem('bazon_install_dismissed', 'true');
-        });
-    }
-}
-
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    // Update UI to notify the user they can add to home screen
-    showInstallAlert();
+    const installBtn = document.getElementById('installBtn');
+    if (installBtn) {
+        installBtn.classList.remove('hidden');
+        installBtn.addEventListener('click', () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(() => {
+                deferredPrompt = null;
+                installBtn.classList.add('hidden');
+            });
+        }, { once: true });
+    }
 });
 
 window.addEventListener('appinstalled', () => {
-    // Log install to analytics
-    console.log('PWA was installed', 'appinstalled');
+    deferredPrompt = null;
 });
 
 // Scroll to Top Logic
 const scrollTopBtn = document.getElementById('scrollTopBtn');
 
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        scrollTopBtn.classList.add('show');
-    } else {
-        scrollTopBtn.classList.remove('show');
-    }
-});
-
-scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+if (scrollTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
     });
-});
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
 
 // Flash Sale Logic
 function initFlashSale() {
@@ -1170,6 +1211,6 @@ const sortSelect = document.getElementById('sortSelect');
 if (sortSelect) {
     sortSelect.addEventListener('change', () => {
         // use activeCategory from global scope
-        renderProducts(activeCategory, searchInput.value);
+        renderProducts(activeCategory, searchInput ? searchInput.value : '');
     });
 }

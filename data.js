@@ -7,7 +7,7 @@
 const heroSlides = [
     {
         id: 1,
-        title: 'Temukan Gaya <span class="gradient-text">Premium</span> Anda',
+        title: 'Temukan Gaya Premium Anda',
         description: 'Koleksi eksklusif dengan kualitas terbaik untuk menunjang penampilan Anda.',
         image: 'images/jacket.png',
         cta: 'Belanja Sekarang',
@@ -15,7 +15,7 @@ const heroSlides = [
     },
     {
         id: 2,
-        title: 'Koleksi <span class="gradient-text">Jam Tangan</span> Mewah',
+        title: 'Koleksi Jam Tangan Mewah',
         description: 'Tampil lebih percaya diri dengan aksesoris pilihan yang elegan.',
         image: 'images/watch.png',
         cta: 'Lihat Koleksi',
@@ -23,7 +23,7 @@ const heroSlides = [
     },
     {
         id: 3,
-        title: 'Sneakers <span class="gradient-text">Terpopuler</span> Bulan Ini',
+        title: 'Sneakers Terpopuler Bulan Ini',
         description: 'Kenyamanan maksimal untuk setiap langkah Anda. Dapatkan sekarang!',
         image: 'images/sneakers.png',
         cta: 'Beli Sekarang',
@@ -244,7 +244,7 @@ const testimonials = [
         role: "Verified Buyer",
         text: "Kualitas jaketnya luar biasa! Bahannya tebal tapi adem dipakai. Pengiriman juga sangat cepat.",
         rating: 5,
-        image: "https://api.dicebear.com/9.x/adventurer/svg?seed=Kingston"
+        image: "images/avatar-1.svg"
     },
     {
         id: 2,
@@ -252,7 +252,7 @@ const testimonials = [
         role: "Fashion Enthusiast",
         text: "Suka banget sama model jam tangannya. Elegan dan mewah, cocok buat dipakai ke kantor.",
         rating: 5,
-        image: "https://api.dicebear.com/9.x/adventurer/svg?seed=Amaya"
+        image: "images/avatar-2.svg"
     },
     {
         id: 3,
@@ -260,7 +260,7 @@ const testimonials = [
         role: "Regular Customer",
         text: "Sneakers-nya nyaman banget dipakai seharian. Ukurannya pas dan sesuai deskripsi.",
         rating: 4,
-        image: "https://api.dicebear.com/9.x/adventurer/svg?seed=Chase"
+        image: "images/avatar-3.svg"
     }
 ];
 // --- Pengaturan Umum ---
