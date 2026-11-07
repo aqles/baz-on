@@ -614,7 +614,7 @@ img {
     border: 1px solid var(--surface-border);
     border-radius: var(--radius);
     color: var(--text-primary);
-    font-size: 0.95rem;
+    font-size: 1rem; /* >=16px: cegah auto-zoom iOS saat fokus */
     font-family: inherit;
     font-weight: 500;
     cursor: pointer;
@@ -691,6 +691,14 @@ img {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+}
+
+.empty-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 48px 16px;
+    font-size: 1rem;
 }
 
 .product-action-buttons .btn-add-cart { flex: 1 1 140px; }
@@ -1029,7 +1037,7 @@ footer {
     color: var(--text-primary);
     outline: none;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 1rem; /* >=16px: cegah auto-zoom iOS saat fokus */
     transition: var(--transition);
 }
 
@@ -1149,7 +1157,9 @@ footer {
     transition: var(--transition);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55); /* taste-skill-ignore: dialog overlay */
     max-height: 90vh;
+    max-height: 92dvh; /* dvh: tinggi viewport HP yang sebenarnya (toolbar browser ikut dihitung) */
     overflow-y: auto;
+    overscroll-behavior: contain;
     position: relative;
 }
 
@@ -1300,6 +1310,10 @@ footer {
 .modal-variants { margin: 4px 0 6px; }
 
 .variant-group { margin-bottom: 14px; }
+
+/* Grup varian yang belum dipilih saat user klik Tambah ke Keranjang */
+.variant-group.variant-error .variant-label { color: var(--danger-text); font-weight: 700; }
+.variant-group.variant-error .variant-btn { border-color: var(--danger); }
 
 .variant-label {
     font-size: 0.95rem;
@@ -1464,6 +1478,7 @@ footer {
 .cart-items {
     flex: 1;
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 6px 20px 20px;
 }
 
@@ -1557,10 +1572,21 @@ footer {
     background: var(--bg-color);
     color: var(--text-primary);
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 1rem; /* >=16px: cegah auto-zoom iOS saat fokus */
 }
 
 .coupon-input:focus { outline: none; border-color: var(--accent); }
+
+.coupon-input.input-error { border-color: var(--danger); }
+
+.coupon-error {
+    color: var(--danger-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: -8px 0 14px;
+}
+
+.coupon-error[hidden] { display: none; }
 
 .btn-apply {
     padding: 0 20px;
@@ -1700,6 +1726,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    pointer-events: none;
 }
 
 .toast {
@@ -1711,12 +1738,14 @@ footer {
     color: var(--text-primary);
     min-width: 280px;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35); /* taste-skill-ignore: floating toast */
-    transform: translateX(120%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
 }
 
-.toast.show { transform: translateX(0); }
+.toast.show { opacity: 1; transform: translateY(0); }
 .toast-success { border-left-color: var(--wa); }
 .toast-error { border-left-color: var(--danger); }
 
@@ -1800,6 +1829,28 @@ footer {
     .current-price { font-size: 1.1rem; }
     .btn-add-cart { padding: 10px; font-size: 0.85rem; }
 
+    /* Aksi kartu di 2 kolom sempit: keranjang selebar kartu di baris 1,
+       wishlist 46px + Detail berbagi baris 2. Dulu add (basis 140px) + wishlist
+       tidak muat sebaris sehingga wishlist terlempar sendirian ke baris sendiri. */
+    .product-action-buttons .btn-add-cart { flex: 1 1 100%; min-height: 46px; font-size: 0.78rem; gap: 6px; padding: 10px 4px; white-space: nowrap; }
+    .product-action-buttons .btn-add-cart i { display: none; } /* teksnya sudah eksplisit; ikon bikin teks membungkus 2 baris di kartu sempit */
+    .product-action-buttons .btn-detail { flex: 1 1 auto; width: auto; min-height: 46px; }
+    .product-card .btn-wishlist { flex: 0 0 46px; height: 46px; min-height: 46px; }
+
+    /* Target sentuh navbar >= 44px */
+    .theme-toggle { width: 44px; height: 44px; }
+    #langToggle { min-height: 44px; display: inline-flex; align-items: center; }
+    .cart-icon-wrapper { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+
+    /* Filter kategori: satu baris geser horizontal, bukan blok membungkus banyak baris */
+    .filter-container { flex-wrap: nowrap; overflow-x: auto; margin-bottom: 22px; }
+    .filter-btn { flex: 0 0 auto; }
+
+    /* Tombol qty cart lebih gampang disentuh */
+    .btn-qty { width: 36px; height: 36px; }
+    .quantity-controls { gap: 6px; }
+    .btn-remove { padding: 10px; }
+
     .controls-wrapper { flex-direction: column; align-items: stretch; }
     .sort-dropdown { width: 100%; }
 
@@ -1817,9 +1868,10 @@ footer {
     .footer-bottom-content { justify-content: center; }
     .divider-vertical { display: none; }
 
-    .product-detail-body { flex-direction: column; padding: 18px; }
-    .modal-image-wrapper { min-height: 240px; }
-    .modal-image-wrapper img { max-height: 300px; }
+    .modal-overlay { padding: 10px; }
+    .product-detail-body { flex-direction: column; padding: 16px; gap: 16px; }
+    .modal-image-wrapper { min-height: 0; }
+    .modal-image-wrapper img { max-height: 210px; width: 100%; object-fit: contain; }
     .modal-title { font-size: 1.5rem; }
     .modal-specs-list { grid-template-columns: 1fr; }
 
@@ -1830,9 +1882,12 @@ footer {
 }
 
 @media (max-width: 480px) {
-    .logo { font-size: 1.3rem; white-space: nowrap; }
-    .nav-icons { gap: 6px; }
-    .install-btn { margin-right: 2px; padding: 8px 10px; font-size: 0.8rem; }
+    .logo { font-size: 1.05rem; white-space: nowrap; }
+    .logo-img { width: 26px; height: 26px; }
+    .nav-icons { gap: 4px; }
+    .install-btn { margin-right: 2px; padding: 8px; font-size: 0.75rem; }
+    #langToggle { margin-right: 4px; padding: 7px 10px; }
+    .theme-toggle { margin-right: 4px; }
     .slide-text h1, .slide-text h2 { font-size: 1.875rem; }
     .slide-image { max-height: 240px; }
     .product-grid { gap: 18px 10px; }
